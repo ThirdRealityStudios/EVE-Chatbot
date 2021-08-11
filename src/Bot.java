@@ -169,7 +169,7 @@ public class Bot implements Serializable
             {
                 foundAnswers.add(answer);
             }
-            else
+            else // EVE forgets about this unnecessary information as it is never asked..
             {
                 iterator.remove();
             }
