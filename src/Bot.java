@@ -2,7 +2,7 @@ import chat.Entry;
 import chat.Message;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.*;
 
 public class Bot implements Serializable
 {
@@ -10,6 +10,7 @@ public class Bot implements Serializable
 
     private String name;
     private float matchQuote;
+    private int maxAnswers = 5;
 
     private ArrayList<Entry> dictionary;
 
@@ -44,6 +45,8 @@ public class Bot implements Serializable
                 lastAnswer.decreasePriority();
 
                 currentAnswer.increasePriority();
+
+                Collections.sort(lastEntry.getOutputs());
             }
         }
     }
@@ -94,6 +97,29 @@ public class Bot implements Serializable
         return matchQuote;
     }
 
+    private ArrayList<Message> getSomeAnswers(Entry entry)
+    {
+        ArrayList<Message> foundAnswers = new ArrayList<Message>(maxAnswers);
+
+        Iterator<Message> iterator = entry.getOutputs().iterator();
+
+        for(int i = 0; i < maxAnswers && iterator.hasNext(); i++)
+        {
+            Message answer = iterator.next();
+
+            foundAnswers.add(answer);
+        }
+
+        return foundAnswers;
+    }
+
+    private Message getRandomAnswer(ArrayList<Message> answers)
+    {
+        int randomIndex = (int) (Math.random() * answers.size());
+
+        return answers.get(randomIndex);
+    }
+
     public Message answer(Entry chatEntry)
     {
         for(Entry entry : dictionary)
@@ -104,9 +130,7 @@ public class Bot implements Serializable
 
                 if(hasAnswers)
                 {
-                    int randomIndex = (int) (Math.random() * entry.getOutputs().size());
-
-                    Message foundAnswer = entry.getOutputs().get(randomIndex);
+                    Message foundAnswer = getRandomAnswer(getSomeAnswers(entry));
 
                     // Update the entry history.
                     lastEntry = currentEntry;
@@ -120,24 +144,24 @@ public class Bot implements Serializable
 
                     return foundAnswer;
                 }
-                else
-                {
-                    Message defaultAnswer = new Message("I can't help you with this..");
 
-                    // Update the entry history.
-                    lastEntry = currentEntry;
-                    currentEntry = chatEntry;
+                Message defaultAnswer = new Message("I can't help you with this..");
 
-                    // Update the answer history.
-                    lastAnswer = currentAnswer;
-                    currentAnswer = defaultAnswer;
+                // Update the entry history.
+                lastEntry = currentEntry;
+                currentEntry = chatEntry;
 
-                    evaluateImportance();
+                // Update the answer history.
+                lastAnswer = currentAnswer;
+                currentAnswer = defaultAnswer;
 
-                    return defaultAnswer;
-                }
+                evaluateImportance();
+
+                return defaultAnswer;
             }
         }
+
+        evaluateImportance();
 
         return null;
     }
@@ -155,9 +179,11 @@ public class Bot implements Serializable
 
             System.out.println(i + "." + dictEntry + ":");
 
-            for(Message linkedMessage : dictEntry.getOutputs())
+            for(int e = 0; e < dictEntry.getOutputs().size(); e++)
             {
-                System.out.println("-> (" + linkedMessage.getPriority() + ") " + linkedMessage.toString());
+                Message linkedMessage = dictEntry.getOutputs().get(e);
+
+                System.out.println("-> " + e + ". (" + linkedMessage.getPriority() + ") " + linkedMessage.toString());
             }
         }
     }

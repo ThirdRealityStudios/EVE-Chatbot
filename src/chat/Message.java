@@ -2,8 +2,9 @@ package chat;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 
-public class Message implements Serializable
+public class Message implements Serializable, Comparable
 {
     private static final long serialVersionUID = 3L;
 
@@ -63,5 +64,11 @@ public class Message implements Serializable
     public boolean equals(Object o)
     {
         return ((Message) o).toString().equals((toString()));
+    }
+
+    @Override
+    public int compareTo(Object o)
+    {
+        return ((Message) o).getPriority() - getPriority();
     }
 }
