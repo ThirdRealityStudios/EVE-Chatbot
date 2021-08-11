@@ -42,6 +42,8 @@ public class Bot implements Serializable
             if(!lastAnswer.equals(currentAnswer) && lastEntry.equals(currentEntry))
             {
                 lastAnswer.decreasePriority();
+
+                currentAnswer.increasePriority();
             }
         }
     }
@@ -147,13 +149,15 @@ public class Bot implements Serializable
 
     public void printDictionary()
     {
-        for(Entry dictEntry : getDictionary())
+        for(int i = 0; i < getDictionary().size(); i++)
         {
-            System.out.println(dictEntry + ":");
+            Entry dictEntry = dictionary.get(i);
+
+            System.out.println(i + "." + dictEntry + ":");
 
             for(Message linkedMessage : dictEntry.getOutputs())
             {
-                System.out.println("-> " + linkedMessage.toString());
+                System.out.println("-> (" + linkedMessage.getPriority() + ") " + linkedMessage.toString());
             }
         }
     }

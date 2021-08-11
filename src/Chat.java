@@ -96,6 +96,8 @@ public class Chat
                 Entry chatEntry = conversation.get(conversation.size() - 1);
 
                 System.out.println("[" + bot.getName() + "]: " + bot.answer(chatEntry).toString());
+
+                bot.printDictionary();
             }
         }
     }
