@@ -22,11 +22,13 @@ public class Chat
 
         scanner = new Scanner(System.in);
 
-        bot = new Bot("EVE", 0.5f);
+        bot = new Bot("EVE");
 
         System.out.println("[" + bot.getName() + "]: Conversation started!");
 
         load();
+
+        //bot.setMinimumMatchQuote(0.85f);
     }
 
     private void write()
@@ -66,7 +68,7 @@ public class Chat
             }
             case "/reset":
             {
-                bot = new Bot(bot.getName(), bot.getMatchQuote());
+                bot = new Bot(bot.getName());
 
                 System.out.println("EVE reset!");
 

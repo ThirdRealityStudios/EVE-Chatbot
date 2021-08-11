@@ -9,7 +9,7 @@ public class Bot implements Serializable
     private static final long serialVersionUID = 3L;
 
     private String name;
-    private float matchQuote;
+    private float matchQuote = 0.85f;
     private int maxAnswers = 5;
 
     private ArrayList<Entry> dictionary;
@@ -17,12 +17,31 @@ public class Bot implements Serializable
     private Entry lastEntry, currentEntry;
     private Message lastAnswer, currentAnswer;
 
-    public Bot(String name, float matchQuote)
+    public Bot(String name)
     {
         this.name = name;
-        this.matchQuote = matchQuote;
 
         dictionary = new ArrayList<Entry>();
+    }
+
+    public void setMinimumMatchQuote(float quote)
+    {
+        this.matchQuote = quote;
+    }
+
+    public float getMinimumMatchQuote()
+    {
+        return matchQuote;
+    }
+
+    public void setMaxAnswers(int max)
+    {
+        this.maxAnswers = max;
+    }
+
+    public float getMaxAnswers()
+    {
+        return maxAnswers;
     }
 
     public String getName()
@@ -36,17 +55,25 @@ public class Bot implements Serializable
     }
 
     // When the same entry is repeated (until the last answer), EVE will "think" the last answers have less importance.
-    public void evaluateImportance()
+    private void evaluateImportance()
     {
         if(lastEntry != null && lastAnswer != null)
         {
-            if(!lastAnswer.equals(currentAnswer) && lastEntry.equals(currentEntry))
+            if(lastAnswer.equals(currentAnswer))
             {
-                lastAnswer.decreasePriority();
+                if(lastEntry.equals(currentEntry))
+                {
+                    lastAnswer.decreasePriority();
+                }
+            }
+            else
+            {
+                if(lastEntry.equals(currentEntry))
+                {
+                    lastAnswer.decreasePriority();
 
-                currentAnswer.increasePriority();
-
-                Collections.sort(lastEntry.getOutputs());
+                    currentAnswer.increasePriority();
+                }
             }
         }
     }
@@ -72,6 +99,11 @@ public class Bot implements Serializable
             {
                 lastChatEntry.link(chatEntry.getEntryName());
             }
+        }
+
+        for(Entry entry : getDictionary())
+        {
+            Collections.sort(entry.getOutputs());
         }
     }
 
@@ -110,6 +142,8 @@ public class Bot implements Serializable
             foundAnswers.add(answer);
         }
 
+        // System.out.println("Found " + foundAnswers.size() + " answers.");
+
         return foundAnswers;
     }
 
@@ -131,6 +165,8 @@ public class Bot implements Serializable
                 if(hasAnswers)
                 {
                     Message foundAnswer = getRandomAnswer(getSomeAnswers(entry));
+
+                    // System.out.println("Chat entry: " + chatEntry);
 
                     // Update the entry history.
                     lastEntry = currentEntry;
@@ -160,8 +196,6 @@ public class Bot implements Serializable
                 return defaultAnswer;
             }
         }
-
-        evaluateImportance();
 
         return null;
     }
