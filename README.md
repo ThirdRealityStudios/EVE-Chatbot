@@ -6,8 +6,8 @@ A simple chatbot which learns from:
   e.g. entering first "Hi" followed by "How are you?", then "Fine".
   It will remember this constellation and will ask you on re-entering "Hi" "How are you?".
   If you ask it "How are you?" it will answer "Fine" or something else if you taught it more words on that question.
+
   
-# Planed features:
 * Every answer will have a priority (importance). 
   It will increase by repeating questions or entries as long as you didn't find the answer you want.
   This will make EVE response mostly correctly.
@@ -15,3 +15,8 @@ A simple chatbot which learns from:
   You repeat it: You say "Hi" again, EVE says now "How are you?".
   That's what you want. Now you enter a different input, e.g. "Fine" and
   EVE will recognize you wanted to hear "How are you?" instead of "Bye".
+
+
+* Unnecessary information is being "forgotten" if you haven't asked for it a long time.
+  "Time" is here actually just an evaluation of the importance of that information (priority).
+  If the priority is too low, it will simply delete the data (answers to an entry).
