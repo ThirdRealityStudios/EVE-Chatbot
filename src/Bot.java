@@ -13,6 +13,9 @@ public class Bot implements Serializable
 
     private ArrayList<Entry> dictionary;
 
+    private Entry lastEntry, currentEntry;
+    private Message lastAnswer, currentAnswer;
+
     public Bot(String name, float matchQuote)
     {
         this.name = name;
@@ -29,6 +32,18 @@ public class Bot implements Serializable
     public float getMatchQuote()
     {
         return matchQuote;
+    }
+
+    // When the same entry is repeated (until the last answer), EVE will "think" the last answers have less importance.
+    public void evaluateImportance()
+    {
+        if(lastEntry != null && lastAnswer != null)
+        {
+            if(!lastAnswer.equals(currentAnswer) && lastEntry.equals(currentEntry))
+            {
+                lastAnswer.decreasePriority();
+            }
+        }
     }
 
     public void processChat(ArrayList<Entry> conversation)
@@ -89,11 +104,35 @@ public class Bot implements Serializable
                 {
                     int randomIndex = (int) (Math.random() * entry.getOutputs().size());
 
-                    return entry.getOutputs().get(randomIndex);
+                    Message foundAnswer = entry.getOutputs().get(randomIndex);
+
+                    // Update the entry history.
+                    lastEntry = currentEntry;
+                    currentEntry = chatEntry;
+
+                    // Update the answer history.
+                    lastAnswer = currentAnswer;
+                    currentAnswer = foundAnswer;
+
+                    evaluateImportance();
+
+                    return foundAnswer;
                 }
                 else
                 {
-                    return new Message("I can't help you with this..");
+                    Message defaultAnswer = new Message("I can't help you with this..");
+
+                    // Update the entry history.
+                    lastEntry = currentEntry;
+                    currentEntry = chatEntry;
+
+                    // Update the answer history.
+                    lastAnswer = currentAnswer;
+                    currentAnswer = defaultAnswer;
+
+                    evaluateImportance();
+
+                    return defaultAnswer;
                 }
             }
         }

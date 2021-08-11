@@ -11,7 +11,7 @@ public class Message implements Serializable
 
     private String message;
 
-    private int priority = 0;
+    private int priority = Integer.MAX_VALUE;
 
     public Message(String message)
     {
@@ -37,9 +37,12 @@ public class Message implements Serializable
         return priority;
     }
 
-    public void increasePriority()
+    public void decreasePriority()
     {
-        priority++;
+        if(priority > Integer.MIN_VALUE)
+        {
+            priority--;
+        }
     }
 
     @Override
