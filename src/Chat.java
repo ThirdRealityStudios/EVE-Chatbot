@@ -22,7 +22,7 @@ public class Chat
 
         scanner = new Scanner(System.in);
 
-        bot = new Bot("EVE");
+        bot = new Bot();
 
         System.out.println("[" + bot.getName() + "]: Conversation started!");
 
@@ -44,7 +44,7 @@ public class Chat
             {
                 save();
 
-                System.out.println("EVE saved!");
+                System.out.println(bot.getName() + " saved!");
 
                 break;
             }
@@ -52,7 +52,7 @@ public class Chat
             {
                 load();
 
-                System.out.println("EVE loaded!");
+                System.out.println(bot.getName() + " loaded!");
 
                 break;
             }
@@ -60,7 +60,7 @@ public class Chat
             {
                 save();
 
-                System.out.println("EVE shut down!");
+                System.out.println(bot.getName() + " shut down!");
 
                 System.exit(0);
 
@@ -68,9 +68,9 @@ public class Chat
             }
             case "/reset":
             {
-                bot = new Bot(bot.getName());
+                bot = new Bot();
 
-                System.out.println("EVE reset!");
+                System.out.println(bot.getName() + " reset!");
 
                 break;
             }
