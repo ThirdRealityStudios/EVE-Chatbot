@@ -28,7 +28,8 @@ public class Chat
 
         load();
 
-        //bot.setMinimumMatchQuote(0.85f);
+        bot.setMinimumMatchQuote(0.7f);
+        bot.setMinimumImportance(-50);
     }
 
     private void write()
@@ -93,13 +94,11 @@ public class Chat
             {
                 bot.processChat(conversation);
 
-                //printDictionary();
-
                 Entry chatEntry = conversation.get(conversation.size() - 1);
 
                 System.out.println("[" + bot.getName() + "]: " + bot.answer(chatEntry).toString());
 
-                bot.printDictionary();
+                //bot.printDictionary();
             }
         }
     }
