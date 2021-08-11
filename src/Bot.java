@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Bot implements Serializable
 {
-    private static final long serialVersionUID = 2L;
+    private static final long serialVersionUID = 3L;
 
     private String name;
     private float matchQuote;
@@ -104,5 +104,18 @@ public class Bot implements Serializable
     public ArrayList<Entry> getDictionary()
     {
         return dictionary;
+    }
+
+    public void printDictionary()
+    {
+        for(Entry dictEntry : getDictionary())
+        {
+            System.out.println(dictEntry + ":");
+
+            for(Message linkedMessage : dictEntry.getOutputs())
+            {
+                System.out.println("-> " + linkedMessage.toString());
+            }
+        }
     }
 }

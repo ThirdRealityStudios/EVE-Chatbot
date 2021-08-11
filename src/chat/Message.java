@@ -5,11 +5,13 @@ import java.util.ArrayList;
 
 public class Message implements Serializable
 {
-    private static final long serialVersionUID = 2L;
+    private static final long serialVersionUID = 3L;
 
     private ArrayList<String> words;
 
     private String message;
+
+    private int priority = 0;
 
     public Message(String message)
     {
@@ -28,6 +30,16 @@ public class Message implements Serializable
     public ArrayList<String> getWords()
     {
         return words;
+    }
+
+    public int getPriority()
+    {
+        return priority;
+    }
+
+    public void increasePriority()
+    {
+        priority++;
     }
 
     @Override

@@ -79,19 +79,6 @@ public class Chat
         }
     }
 
-    public void printDictionary()
-    {
-        for(Entry dictEntry : bot.getDictionary())
-        {
-            System.out.println(dictEntry + ":");
-
-            for(Message linkedMessage : dictEntry.getOutputs())
-            {
-                System.out.println("-> " + linkedMessage.toString());
-            }
-        }
-    }
-
     public void chat()
     {
         while(true)
